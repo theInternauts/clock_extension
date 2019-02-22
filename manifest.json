@@ -1,0 +1,26 @@
+{
+  "name": "Clock Extension",
+  "description" : "An extension to help handle time in multiple time zones",
+  "version": "1.0",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_popup": "clocks.html",
+    "default_icon": "clock_extensions.png",
+    "default_title": "Clock Extension"
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "Ctrl+Shift+F"
+      },
+      "description": "Opens clocks.html"
+    }
+  },
+  "permissions": ["declarativeContent"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "options_page": "options.html"
+}
