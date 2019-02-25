@@ -21,10 +21,12 @@ App = (function() {
     return instance;
   }
 
-  function build() {}
+  function build() {
+
+  }
 
   function render() {
-    clocks.push(new Clock())
+    clocks.push(new Clock(), new Clock())
   }
 
   return {
@@ -41,10 +43,12 @@ function Clock() {
   var id;
   var date;
   var rootNode;
+  var clockNode;
   var ctx;
   var secHandLength = 60;
   var width = 400;
-  var height = 400;
+  var height = 170;
+  var tz = [["Indian/Mauritius", ""], ["America/Los_Angeles", ""], ["America/New_York", ""], ["Asia/Tokyo", ""], ["Australia/Sydney", ""], ["Europe/London", ""]];
 
   function init() {
     build();
@@ -67,9 +71,15 @@ function Clock() {
     canvas.setAttribute("width", width);
     canvas.setAttribute("height", height);
     ctx = canvas.getContext('2d');
-    date = new Date;
+
     rootNode = document.getElementsByTagName('body')[0];
-    rootNode.append(canvas);
+    clockNode = document.createElement("div");
+    clockNode.setAttribute("class", "clockNode");
+
+    clockNode.append(canvas);
+    buildSelect(clockNode, "America/Los_Angeles");
+    rootNode.append(clockNode);
+    date = new Date;
 
     render();
   }
@@ -198,6 +208,26 @@ function Clock() {
 
     ctx.strokeStyle = '#000';   // COLOR OF THE HAND.
     ctx.stroke();
+  }
+
+  function buildSelect(rootNode, initValue) {
+    var lbl = document.createElement("label");
+    lbl.setAttribute("for", "tz-select");
+    lbl.innerText = "Choose a timezone";
+
+    var select = document.createElement("select");
+    select.setAttribute("id", "tz-select");
+    tz.forEach(function(zone) {
+      var option = document.createElement("option");
+      option.setAttribute("value", zone[1]);
+      if(zone[0] == initValue){
+        option.setAttribute("selected", null);
+      }
+      option.innerText = zone[0];
+      select.append(option);
+    });
+
+    rootNode.append(select);
   }
 
   init();
