@@ -2,6 +2,9 @@
 window.onload = function() {
   window.console.log("here");
   App.getRuntime();
+  window.jun = moment("2014-06-01T12:00:00Z");
+  jun.tz('America/Los_Angeles').format('ha z');
+  window.tz_names = moment.tz.names();
 }
 
 
@@ -48,7 +51,7 @@ function Clock() {
   var secHandLength = 60;
   var width = 400;
   var height = 170;
-  var tz = [["Indian/Mauritius", ""], ["America/Los_Angeles", ""], ["America/New_York", ""], ["Asia/Tokyo", ""], ["Australia/Sydney", ""], ["Europe/London", ""]];
+  var tz = moment.tz.names();
 
   function init() {
     build();
@@ -219,11 +222,11 @@ function Clock() {
     select.setAttribute("id", "tz-select");
     tz.forEach(function(zone) {
       var option = document.createElement("option");
-      option.setAttribute("value", zone[1]);
-      if(zone[0] == initValue){
+      option.setAttribute("value", zone);
+      if(zone == initValue){
         option.setAttribute("selected", null);
       }
-      option.innerText = zone[0];
+      option.innerText = zone;
       select.append(option);
     });
 
