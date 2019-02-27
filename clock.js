@@ -11,6 +11,14 @@ window.onload = function() {
 App = (function() {
   var instance;
   var clocks = [];
+  var settings = [
+    {
+      tz: "America/Los_Angeles"
+    },
+    {
+      tz: "Asia/Tokyo"
+    }
+  ];
 
   function init() {
     build();
@@ -29,7 +37,9 @@ App = (function() {
   }
 
   function render() {
-    clocks.push(new Clock(), new Clock())
+    settings.forEach(function(config){
+      clocks.push(new Clock(config.tz))
+    })
   }
 
   return {
@@ -42,7 +52,7 @@ App = (function() {
   }
 }())
 
-function Clock() {
+function Clock(config) {
   var id;
   var date;
   var rootNode;
@@ -52,6 +62,7 @@ function Clock() {
   var width = 400;
   var height = 170;
   var tz = moment.tz.names();
+  var config = config;
 
   function init() {
     build();
@@ -80,16 +91,16 @@ function Clock() {
     clockNode.setAttribute("class", "clockNode");
 
     clockNode.append(canvas);
-    buildSelect(clockNode, "America/Los_Angeles");
+    buildSelect(clockNode, config);
     rootNode.append(clockNode);
-    date = new Date;
+    date = moment(new Date()).tz(config);
 
     render();
   }
   function tick() {
     console.log("tick")
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    date = new Date;
+    date = moment(new Date()).tz(config);
     render();
   }
   function start() {
@@ -161,7 +172,7 @@ function Clock() {
   }
 
   function SHOW_SECONDS() {
-    var sec = date.getSeconds();
+    var sec = date.seconds();
     var angle = ((Math.PI * 2) * (sec / 60)) - ((Math.PI * 2) / 4);
     ctx.lineWidth = 0.5;              // HAND WIDTH.
 
@@ -183,7 +194,7 @@ function Clock() {
   }
 
   function SHOW_MINUTES() {
-    var min = date.getMinutes();
+    var min = date.minutes();
     var angle = ((Math.PI * 2) * (min / 60)) - ((Math.PI * 2) / 4);
     ctx.lineWidth = 1.5;              // HAND WIDTH.
 
@@ -198,8 +209,8 @@ function Clock() {
   }
 
   function SHOW_HOURS() {
-    var hour = date.getHours();
-    var min = date.getMinutes();
+    var hour = date.hours();
+    var min = date.minutes();
     var angle = ((Math.PI * 2) * ((hour * 5 + (min / 60) * 5) / 60)) - ((Math.PI * 2) / 4);
     ctx.lineWidth = 1.5;              // HAND WIDTH.
 
