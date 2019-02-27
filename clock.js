@@ -37,14 +37,14 @@ App = (function() {
   }
 
   function render() {
-    settings.forEach(function(config){
+    settings.forEach(function(config) {
       clocks.push(new Clock(config.tz))
     })
   }
 
   return {
     getRuntime: function() {
-      if(!instance){
+      if(!instance) {
         instance = init();
       }
       return instance;
@@ -54,6 +54,7 @@ App = (function() {
 
 function Clock(config) {
   var id;
+  var randomInt = Math.floor(Math.random()*10000);
   var date;
   var rootNode;
   var clockNode;
@@ -81,7 +82,7 @@ function Clock(config) {
   }
   function build() {
     canvas = document.createElement('canvas');
-    canvas.setAttribute("id", `canvas-${Math.floor(Math.random()*10000)}`)
+    canvas.setAttribute("id", `canvas-${randomInt}`)
     canvas.setAttribute("width", width);
     canvas.setAttribute("height", height);
     ctx = canvas.getContext('2d');
@@ -107,7 +108,7 @@ function Clock(config) {
     id = setInterval(tick, 1000);
   }
   function stop() {
-    if(id){
+    if(id) {
       console.log("clearing:", id)
       clearInterval(id);
       id = null;
@@ -225,16 +226,17 @@ function Clock(config) {
   }
 
   function buildSelect(rootNode, initValue) {
+    var selectLbl = `tz-select-${randomInt}`;
     var lbl = document.createElement("label");
-    lbl.setAttribute("for", "tz-select");
+    lbl.setAttribute("for", selectLbl);
     lbl.innerText = "Choose a timezone";
 
     var select = document.createElement("select");
-    select.setAttribute("id", "tz-select");
+    select.setAttribute("id", selectLbl);
     tz.forEach(function(zone) {
       var option = document.createElement("option");
       option.setAttribute("value", zone);
-      if(zone == initValue){
+      if(zone == initValue) {
         option.setAttribute("selected", null);
       }
       option.innerText = zone;
