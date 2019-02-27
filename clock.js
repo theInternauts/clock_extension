@@ -1,10 +1,6 @@
 
 window.onload = function() {
-  window.console.log("here");
   App.getRuntime();
-  window.jun = moment("2014-06-01T12:00:00Z");
-  jun.tz('America/Los_Angeles').format('ha z');
-  window.tz_names = moment.tz.names();
 }
 
 
