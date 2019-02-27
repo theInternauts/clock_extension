@@ -38,7 +38,7 @@ App = (function() {
 
   function render() {
     settings.forEach(function(config) {
-      clocks.push(new Clock(config.tz))
+      clocks.push(new Clock(config))
     })
   }
 
@@ -62,7 +62,7 @@ function Clock(config) {
   var secHandLength = 60;
   var width = 400;
   var height = 170;
-  var tz = moment.tz.names();
+  var tzList = moment.tz.names();
   var config = config;
 
   function init() {
@@ -80,6 +80,9 @@ function Clock(config) {
     SHOW_MINUTES();
     SHOW_HOURS();
   }
+  function clear() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
   function build() {
     canvas = document.createElement('canvas');
     canvas.setAttribute("id", `canvas-${randomInt}`)
@@ -92,16 +95,16 @@ function Clock(config) {
     clockNode.setAttribute("class", "clockNode");
 
     clockNode.append(canvas);
-    buildSelect(clockNode, config);
+    buildSelect(clockNode, config.tz);
     rootNode.append(clockNode);
-    date = moment(new Date()).tz(config);
+    date = moment(new Date()).tz(config.tz);
 
     render();
   }
   function tick() {
     console.log("tick")
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    date = moment(new Date()).tz(config);
+    clear();
+    date = moment(new Date()).tz(config.tz);
     render();
   }
   function start() {
@@ -233,7 +236,7 @@ function Clock(config) {
 
     var select = document.createElement("select");
     select.setAttribute("id", selectLbl);
-    tz.forEach(function(zone) {
+    tzList.forEach(function(zone) {
       var option = document.createElement("option");
       option.setAttribute("value", zone);
       if(zone == initValue) {
@@ -244,6 +247,13 @@ function Clock(config) {
     });
 
     rootNode.append(select);
+
+    select.addEventListener("change", function(evt) {
+      config.tz = evt.currentTarget.value;
+      date.tz(evt.currentTarget.value);
+      clear();
+      render();
+    })
   }
 
   init();
