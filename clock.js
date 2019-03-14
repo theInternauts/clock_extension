@@ -30,7 +30,13 @@ App = (function() {
 
   function build() {
     settings.forEach(function(config) {
-      clocks.push(new Clock(config));
+      var clock = new Clock(config);
+      clock.rootNode().addEventListener('projectionEvent', function(evt) {
+         clocks.forEach(function(clock) {
+          clock.convertTimeProjection(evt.detail);
+        })
+      })
+      clocks.push(clock);
     })
   }
 
@@ -264,15 +270,19 @@ function Clock(config) {
 
     rootNode.append(timeProjectionInput);
 
-    timeProjectionInput.addEventListener("change", function(evt) {
-      // need send global event for App to handle and trigger render with event data
-      console.log("woot:", evt.target.value);
-    })
+    timeProjectionInput.addEventListener("input", function(evt) {
+      evt.target.dispatchEvent(new CustomEvent('projectionEvent', {
+        bubbles: true,
+        detail: moment(evt.target.value)
+      }));
+    });
   }
 
   function convertTimeProjection (momentTimeObj) {
+    console.log("converting", momentTimeObj);
     if (momentTimeObj && momentTimeObj != null && momentTimeObj != {}) {
-      timeProjectionInput.setAttribute('value', randomInt+Math.floor(Math.random()*10000));
+      var newDate = momentTimeObj.clone().tz(config.tz);
+      timeProjectionInput.setAttribute('value', newDate);
     } else {
       timeProjectionInput.setAttribute('value', date);
     }
@@ -294,6 +304,9 @@ function Clock(config) {
     },
     convertTimeProjection: function(momentTimeObj) {
       convertTimeProjection(momentTimeObj);
+    },
+    rootNode: function() {
+      return rootNode;
     }
   }
 }
