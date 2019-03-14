@@ -29,13 +29,24 @@ App = (function() {
   }
 
   function build() {
-
+    settings.forEach(function(config) {
+      var clock = new Clock(config);
+      clocks.push(clock);
+      buildInput(clock.rootNode(), clock.config());
+    })
   }
 
   function render() {
-    settings.forEach(function(config) {
-      clocks.push(new Clock(config))
-    })
+
+  }
+
+  function buildInput(rootNode, config) {
+    var input = document.createElement('input');
+    input.setAttribute('class', `currentTime-input`);
+    input.setAttribute('id', `currentTime-${config.randomInt}`);
+    input.setAttribute('value', `the time is now: ${config.tz}`);
+
+    rootNode.append(input);
   }
 
   return {
@@ -62,6 +73,7 @@ function Clock(config) {
   var config = config;
 
   function init() {
+    config.randomInt = randomInt;
     build();
     start();
   }
@@ -265,6 +277,12 @@ function Clock(config) {
     },
     stop: function() {
       stop();
+    },
+    config: function() {
+      return config;
+    },
+    rootNode: function() {
+      return rootNode;
     }
   }
 }
