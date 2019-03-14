@@ -30,23 +30,14 @@ App = (function() {
 
   function build() {
     settings.forEach(function(config) {
-      var clock = new Clock(config);
-      clocks.push(clock);
-      buildInput(clock.rootNode(), clock.config());
+      clocks.push(new Clock(config));
     })
   }
 
   function render() {
-
-  }
-
-  function buildInput(rootNode, config) {
-    var input = document.createElement('input');
-    input.setAttribute('class', `currentTime-input`);
-    input.setAttribute('id', `currentTime-${config.randomInt}`);
-    input.setAttribute('value', `the time is now: ${config.tz}`);
-
-    rootNode.append(input);
+    clocks.forEach(function(clock) {
+      clock.convertTimeProjection();
+    })
   }
 
   return {
@@ -71,9 +62,9 @@ function Clock(config) {
   var height = 170;
   var tzList = moment.tz.names();
   var config = config;
+  var timeProjectionInput;
 
   function init() {
-    config.randomInt = randomInt;
     build();
     start();
   }
@@ -104,6 +95,7 @@ function Clock(config) {
 
     clockNode.append(canvas);
     buildSelect(clockNode, config.tz);
+    buildInput(clockNode, config.tz);
     rootNode.append(clockNode);
     date = moment(new Date()).tz(config.tz);
 
@@ -264,6 +256,28 @@ function Clock(config) {
     })
   }
 
+  function buildInput(rootNode, tz) {
+    timeProjectionInput = document.createElement('input');
+    timeProjectionInput.setAttribute('class', `timeProjectionInput-input`);
+    timeProjectionInput.setAttribute('id', `timeProjectionInput-${randomInt}`);
+    timeProjectionInput.setAttribute('value', `the time is now: ${tz}`);
+
+    rootNode.append(timeProjectionInput);
+
+    timeProjectionInput.addEventListener("change", function(evt) {
+      // need send global event for App to handle and trigger render with event data
+      console.log("woot:", evt.target.value);
+    })
+  }
+
+  function convertTimeProjection (momentTimeObj) {
+    if (momentTimeObj && momentTimeObj != null && momentTimeObj != {}) {
+      timeProjectionInput.setAttribute('value', randomInt+Math.floor(Math.random()*10000));
+    } else {
+      timeProjectionInput.setAttribute('value', date);
+    }
+  }
+
   init();
   return {
     id: function() {
@@ -278,11 +292,8 @@ function Clock(config) {
     stop: function() {
       stop();
     },
-    config: function() {
-      return config;
-    },
-    rootNode: function() {
-      return rootNode;
+    convertTimeProjection: function(momentTimeObj) {
+      convertTimeProjection(momentTimeObj);
     }
   }
 }
