@@ -9,10 +9,10 @@ App = (function() {
   var clocks = [];
   var settings = [
     {
-      tz: "America/Los_Angeles"
+      tz: "Asia/Tokyo"
     },
     {
-      tz: "Asia/Tokyo"
+      tz: "America/Los_Angeles"
     }
   ];
 
