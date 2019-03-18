@@ -266,7 +266,6 @@ function Clock(config) {
     timeProjectionInput = document.createElement('input');
     timeProjectionInput.setAttribute('class', `timeProjectionInput-input`);
     timeProjectionInput.setAttribute('id', `timeProjectionInput-${randomInt}`);
-    timeProjectionInput.setAttribute('value', `the time is now: ${tz}`);
 
     rootNode.append(timeProjectionInput);
 
@@ -282,9 +281,9 @@ function Clock(config) {
     console.log("converting", momentTimeObj);
     if (momentTimeObj && momentTimeObj != null && momentTimeObj != {}) {
       var newDate = momentTimeObj.clone().tz(config.tz);
-      timeProjectionInput.setAttribute('value', newDate);
+      timeProjectionInput.value = newDate;
     } else {
-      timeProjectionInput.setAttribute('value', date);
+      timeProjectionInput.value = date;
     }
   }
 
