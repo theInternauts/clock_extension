@@ -32,17 +32,19 @@ App = (function() {
     settings.forEach(function(config) {
       var clock = new Clock(config);
       clock.rootNode().addEventListener('projectionEvent', function(evt) {
-         clocks.forEach(function(clock) {
-          clock.convertTimeProjection(evt.detail);
-        })
+        processTimeProjectionOnAllClocks(evt.detail)
       })
       clocks.push(clock);
     })
   }
 
   function render() {
+    processTimeProjectionOnAllClocks();
+  }
+
+  function processTimeProjectionOnAllClocks(data) {
     clocks.forEach(function(clock) {
-      clock.convertTimeProjection();
+      clock.convertTimeProjection(data);
     })
   }
 
