@@ -110,7 +110,6 @@ function Clock(config) {
     render();
   }
   function tick() {
-    console.log("tick")
     clear();
     date = moment(new Date()).tz(config.tz);
     render();
@@ -120,7 +119,6 @@ function Clock(config) {
   }
   function stop() {
     if(id) {
-      console.log("clearing:", id)
       clearInterval(id);
       id = null;
     }
