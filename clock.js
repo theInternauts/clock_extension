@@ -269,16 +269,19 @@ function Clock(config) {
 
     rootNode.append(timeProjectionInput);
 
-    timeProjectionInput.addEventListener("input", function(evt) {
-      evt.target.dispatchEvent(new CustomEvent('projectionEvent', {
-        bubbles: true,
-        detail: moment(evt.target.value)
-      }));
+    timeProjectionInput.addEventListener("change", function(evt) {
+      dispatchProjectionEvent(evt);
     });
   }
 
-  function convertTimeProjection (momentTimeObj) {
-    console.log("converting", momentTimeObj);
+  function dispatchProjectionEvent(evt) {
+    evt.target.dispatchEvent(new CustomEvent('projectionEvent', {
+      bubbles: true,
+      detail: moment(new Date(evt.target.value)).tz(config.tz)
+    }));
+  }
+
+  function convertTimeProjection(momentTimeObj) {
     if (momentTimeObj && momentTimeObj != null && momentTimeObj != {}) {
       var newDate = momentTimeObj.clone().tz(config.tz);
       timeProjectionInput.value = newDate;
