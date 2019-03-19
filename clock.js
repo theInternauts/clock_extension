@@ -98,15 +98,21 @@ function Clock(config) {
     ctx = canvas.getContext('2d');
 
     rootNode = document.getElementsByTagName('body')[0];
+    clockContainer = document.createElement("div");
+    clockContainer.setAttribute("class", "clockContainer");
     clockNode = document.createElement("div");
     clockNode.setAttribute("class", "clockNode");
-
     clockNode.append(canvas);
     buildSelect(clockNode, config.tz);
-    buildInput(clockNode, config.tz);
-    rootNode.append(clockNode);
+    clockContainer.append(clockNode);
+
+    projectionNode = document.createElement("div");
+    projectionNode.setAttribute("class", "projectionNode");
+    buildInput(projectionNode, config.tz);
+    clockContainer.append(projectionNode);
     date = moment(new Date()).tz(config.tz);
 
+    rootNode.append(clockContainer);
     render();
   }
   function tick() {
