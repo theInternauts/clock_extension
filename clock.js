@@ -63,7 +63,6 @@ function Clock(config) {
   var randomInt = Math.floor(Math.random()*10000);
   var date;
   var rootNode;
-  var clockNode;
   var ctx;
   var secHandLength = 60;
   var width = 400;
@@ -91,6 +90,8 @@ function Clock(config) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
   function build() {
+    var clockContainer, clockNode, projectionNode;
+
     canvas = document.createElement('canvas');
     canvas.setAttribute("id", `canvas-${randomInt}`)
     canvas.setAttribute("width", width);
