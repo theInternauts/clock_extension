@@ -59,7 +59,7 @@ App = (function() {
 }())
 
 function Clock(config) {
-  var id;
+  var intervalId;
   var randomInt = Math.floor(Math.random()*10000);
   var date;
   var rootNode;
@@ -122,12 +122,12 @@ function Clock(config) {
     render();
   }
   function start() {
-    id = setInterval(tick, 1000);
+    intervalId = setInterval(tick, 1000);
   }
   function stop() {
-    if(id) {
-      clearInterval(id);
-      id = null;
+    if(intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
     }
   }
 
